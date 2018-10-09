@@ -1,4 +1,4 @@
-package com.ecommerce.ecom;
+package com.ecommerce.ecom.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
@@ -17,23 +18,38 @@ import org.springframework.security.oauth2.provider.request.DefaultOAuth2Request
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
+import com.ecommerce.ecom.services.impl.UserServiceImpl;
+
 @Configuration
 @EnableWebSecurity
 public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private ClientDetailsService clientDetailsService;
+	
+	
+	@Autowired
+	private UserServiceImpl userService;
 
 	@Autowired
 	public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("bill").password("abc123")
-		.roles("ADMIN").and().withUser("bob")
-				.password("abc123").roles("USER");
+		
+		auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder(8));
+
+//		auth.inMemoryAuthentication().withUser("bill").password("abc123")
+//		.roles("ADMIN").and().withUser("bob")
+//				.password("abc123").roles("USER");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().anonymous().disable().authorizeRequests().antMatchers("/oauth/token").permitAll();
 	}
+
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		// TODO Auto-generated method stub
+//		auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+//	}
 
 	@Override
 	@Bean

@@ -1,4 +1,4 @@
-package com.ecommerce.ecom;
+package com.ecommerce.ecom.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

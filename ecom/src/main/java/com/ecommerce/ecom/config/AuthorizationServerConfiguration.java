@@ -1,4 +1,4 @@
-package com.ecommerce.ecom;
+package com.ecommerce.ecom.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
