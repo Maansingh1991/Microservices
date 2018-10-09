@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity(name="user")
 public class User implements UserDetails, Serializable {
 	
-	
 	/**
 	 * 
 	 */
