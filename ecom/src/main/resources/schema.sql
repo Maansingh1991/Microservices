@@ -88,22 +88,3 @@ create table ecomm.oauth_code (
   code VARCHAR(256), 
   authentication LONGBLOB
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
