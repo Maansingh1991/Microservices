@@ -1,28 +1,27 @@
 package com.ecommerce.ecom.util;
 
-import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class PanCardDetailsValidation {
 
-	public static void main(String[] args) 
+	 public static boolean isValidPanCard = false;
+	 
+	public static boolean validatePanCardNumber(String panCardNumber){
+		
+		 Pattern panCardPattern = Pattern.compile("[a-zA-Z]{5}\\d{4}[a-zA-Z]{1}");
+		   isValidPanCard = panCardPattern.matcher(panCardNumber).matches();
+        return isValidPanCard;
+    }
+	
+	/*public static void main(String[] args) 
 	 {
-	  System.out.println("Enter the number of the valid pan Numbers for Test");
-	  Scanner scn=new Scanner(System.in);
-	  int theTestCaseCount=scn.nextInt();
-	  String s[]=new String[theTestCaseCount];
-	  boolean output[]=new boolean[theTestCaseCount];
-	  for(int i=0; i<s.length;i++)
-	  {
-	   s[i]=scn.next();
-	   boolean ss=s[i].matches("[a-zA-Z]{5}\\d{4}[a-zA-Z]{1}");
-	   output[i]=ss;
-	  }
-	  for(boolean b:output)
-	  {
-	   System.out.println("The verification result " + b);
-	  }
-	  scn.close();
+	  String panCardNumber="bngps1288a";
+	  System.out.println("The pan card validation result is as " + PanCardDetailsValidation.validatePanCardNumber(panCardNumber) );
+	 
+	 
+	  }*/
+	 
 	  
 
-	 }
+	 
 }
