@@ -1,6 +1,10 @@
-package com.ecommerce.ecom.config;
+package com.ecommerce.ecom.security.config;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +21,9 @@ import org.springframework.security.oauth2.provider.approval.TokenStoreUserAppro
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
-import com.ecommerce.ecom.services.impl.UserServiceImpl;
+import com.ecommerce.ecom.services.impl.UserDetailServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -27,17 +32,31 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private ClientDetailsService clientDetailsService;
 	
 	
+	@Value("${spring.datasource.driver-class-name}")  
+	private String driverClassName;
+	
+	@Value("${spring.datasource.username}")
+	private String userName;
+	
+	
+	@Value("${spring.datasource.password}")
+	private String password;
+	
+	@Value("${spring.datasource.url}")
+	private String dbUrl;
+	
+	
 	@Autowired
-	private UserServiceImpl userService;
+	private UserDetailServiceImpl userService;
 
 	@Autowired
 	public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
 		
-		auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder(8));
+		//auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder(8));
 
-//		auth.inMemoryAuthentication().withUser("bill").password("abc123")
-//		.roles("ADMIN").and().withUser("bob")
-//				.password("abc123").roles("USER");
+		auth.inMemoryAuthentication().withUser("bill").password("abc123")
+		.roles("ADMIN").and().withUser("bob")
+				.password("abc123").roles("USER");
 	}
 
 	@Override
@@ -59,7 +78,14 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public TokenStore tokenStore() {
-		return new InMemoryTokenStore();
+		
+		  DataSource tokenDataSource = DataSourceBuilder.create()
+                  .driverClassName(driverClassName)
+                  .username(userName)
+                  .password(password)
+                  .url(dbUrl)
+                  .build();
+  return new JdbcTokenStore(tokenDataSource);
 	}
 
 	@SuppressWarnings("deprecation")

@@ -1,35 +1,53 @@
 package com.ecommerce.ecom.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.ecom.entities.User;
 import com.ecommerce.ecom.repositories.UserRepository;
+import com.ecommerce.ecom.services.UserService;
 
-
-@Transactional
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserRepository userRepository;
+	UserRepository userRepository;
 	
 	
+
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public void add(User user) {
 		
-		User user=userRepository.findOneByUserName(username);
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		userRepository.save(user);
 		
-		if(user != null){
-			return user;
-		}
-		
-		
-		throw new UsernameNotFoundException(username);
+	}
+
+	@Override
+	public User update() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean delete(User user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public User getUserById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
