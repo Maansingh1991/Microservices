@@ -22,6 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<org.mapstruct.version>1.2.0.Final</org.mapstruct.version>
 		<spring-cloud.version>Finchley.SR1</spring-cloud.version>
 	</properties>
 
@@ -43,6 +44,14 @@
 			<artifactId>spring-cloud-starter-oauth2</artifactId>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -54,9 +63,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-devtools</artifactId>
-</dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -76,7 +85,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                <source>1.6</source> <!-- or higher, depending on your project -->
+                <target>1.6</target> <!-- or higher, depending on your project -->
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.mapstruct</groupId>
+                        <artifactId>mapstruct-processor</artifactId>
+                        <version>${org.mapstruct.version}</version>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+
 			</plugin>
+
 		</plugins>
 	</build>
 

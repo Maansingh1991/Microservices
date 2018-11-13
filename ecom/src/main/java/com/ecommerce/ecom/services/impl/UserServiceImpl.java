@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.ecom.entities.User;
+import com.ecommerce.ecom.mapper.UserMapper;
 import com.ecommerce.ecom.repositories.UserRepository;
 import com.ecommerce.ecom.services.UserService;
 
@@ -15,11 +16,16 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+//	@Autowired
+//	UserMapper userMapper; TODO: need to debug this issue
+
 	
 	
 
 	@Override
 	public void add(User user) {
+		
+		UserMapper.INSTANCE.userToUserDTO(user);
 		
 		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		userRepository.save(user);
@@ -33,21 +39,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean delete(User user) {
+	public void delete(long id) {
 		// TODO Auto-generated method stub
-		return false;
+		userRepository.deleteById(id);
+		
 	}
 
 	@Override
 	public User getUserById(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		return userRepository.findOneById(id);
 	}
 
 	@Override
 	public List<User> getAllUsers() {
 		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findAll();
 	}
 
 }
